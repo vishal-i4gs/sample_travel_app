@@ -1,0 +1,74 @@
+[
+  {
+    "id": "bus1",
+    "name": "Bus #1",
+    "type": "A/C Sleeper",
+    "starRating": 3.1
+  },
+  {
+    "id": "bus2",
+    "name": "Bus #2",
+    "type": "A/C Seater",
+    "starRating": 4.2
+  },
+  {
+    "id": "bus3",
+    "name": "Bus #3",
+    "type": "Non A/C Sleeper",
+    "starRating": 5.0
+  },
+  {
+    "id": "bus4",
+    "name": "Bus #4",
+    "type": "Non A/C Seater",
+    "starRating": 3.6
+  },
+  {
+    "id": "bus5",
+    "name": "Bus #5",
+    "type": "A/C Sleeper",
+    "starRating": 4.3
+  },
+  {
+    "id": "bus6",
+    "name": "Bus #6",
+    "type": "A/C Seater",
+    "starRating": 4.7
+  },
+  {
+    "id": "bus7",
+    "name": "Bus #7",
+    "type": "Non A/C Sleeper",
+    "starRating": 3.8
+  },
+  {
+    "id": "bus8",
+    "name": "Bus #8",
+    "type": "Non A/C Seater",
+    "starRating": 4.2
+  },
+  {
+    "id": "bus9",
+    "name": "Bus #9",
+    "type": "A/C Sleeper",
+    "starRating": 4.9
+  },
+  {
+    "id": "bus10",
+    "name": "Bus #10",
+    "type": "A/C Seater",
+    "starRating": 5.0
+  },
+  {
+    "id": "bus11",
+    "name": "Bus #11",
+    "type": "Non A/C Sleeper",
+    "starRating": 3.3
+  },
+  {
+    "id": "bus12",
+    "name": "Bus #12",
+    "type": "Non A/C Seater",
+    "starRating": 4.7
+  }
+]
