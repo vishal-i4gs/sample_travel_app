@@ -1,5 +1,6 @@
 package com.example.sampletravelapp.UI.Activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -100,20 +101,10 @@ public class SearchBusActivity extends AppCompatActivity {
                             Toast.LENGTH_SHORT).show();
                     return;
                 }
-                new AlertDialog.Builder(SearchBusActivity.this)
-                        .setTitle("Book ticket")
-                        .setMessage("Are you sure you want to book this?")
-                        .setPositiveButton(android.R.string.yes, (dialog, which) -> {
-                            OrderItem orderItem = new OrderItem();
-                            orderItem.orderId = UUID.randomUUID().toString();
-                            orderItem.active = OrderStatus.ON_SCHEDULE;
-                            orderItem.orderTime = new Date();
-                            orderItem.journeyDate = finalJourneyDate;
-                            orderItem.journeyId = journeyBusPlace.journey.journeyId;
-                            appViewModel.addOrderItem(orderItem);
-                        })
-                        .setNegativeButton(android.R.string.no, null)
-                        .show();
+                Intent intent = new Intent(SearchBusActivity.this, RouteDetailsActivity.class);
+                intent.putExtra("journeyId",journeyBusPlace.journey.journeyId);
+                intent.putExtra("dateInt",finalJourneyDate.getTime());
+                startActivity(intent);
             }
         });
         appViewModel.getAllBusAttributes().observe(this, filters ->
