@@ -16,7 +16,7 @@ import java.util.List;
 
 @Dao
 public interface OrderDao {
-    @Query("SELECT * FROM orders ORDER BY orderTime DESC")
+    @Query("SELECT * FROM orders ORDER BY journeyDate DESC")
     LiveData<List<JourneyBusPlaceOrder>> loadAllOrders();
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
