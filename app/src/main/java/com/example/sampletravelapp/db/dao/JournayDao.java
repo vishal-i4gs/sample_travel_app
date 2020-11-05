@@ -13,6 +13,7 @@ import com.example.sampletravelapp.Model.Bus;
 import com.example.sampletravelapp.Model.BusAttributes;
 import com.example.sampletravelapp.Model.Journey;
 import com.example.sampletravelapp.Model.JourneyBusPlace;
+import com.example.sampletravelapp.Model.JourneyBusPlaceOrder;
 
 import java.util.List;
 
@@ -50,5 +51,8 @@ public interface JournayDao {
 
     @RawQuery(observedEntities = {Journey.class, Bus.class, BusAttributes.class})
     LiveData<List<JourneyBusPlace>> getJourneyRawQuery(SupportSQLiteQuery query);
+
+    @Query("select * from journey where journeyId = :journeyId")
+    LiveData<JourneyBusPlace> loadJourney(long journeyId);
 }
 

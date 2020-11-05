@@ -181,6 +181,10 @@ public class Repository {
         return shared;
     }
 
+    public LiveData<JourneyBusPlace> getJourneyItem(long journeyId) {
+        return mDatabase.journayDao().loadJourney(journeyId);
+    }
+
     public LiveData<List<JourneyBusPlace>> getItemsForNameOrderBy(
             String startLocation,
             String endLocation,

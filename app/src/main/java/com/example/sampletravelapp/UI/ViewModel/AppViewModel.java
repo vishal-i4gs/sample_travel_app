@@ -54,6 +54,10 @@ public class AppViewModel extends AndroidViewModel {
         return mRepository.getAllJournies();
     }
 
+    public LiveData<JourneyBusPlace> getJourneyItem(long journeyId) {
+        return mRepository.getJourneyItem(journeyId);
+    }
+
     public List<String> getBusTypes() {
         return mRepository.getBusTypes();
     }
