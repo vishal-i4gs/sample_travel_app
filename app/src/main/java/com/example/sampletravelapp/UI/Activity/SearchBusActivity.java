@@ -30,6 +30,12 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.UUID;
 
+import static com.example.sampletravelapp.Model.OrderBy.DEPARTURE_TIME;
+import static com.example.sampletravelapp.Model.OrderBy.PRICE;
+import static com.example.sampletravelapp.Model.OrderBy.RATING;
+import static com.example.sampletravelapp.Model.OrderBy.RELEVANCE;
+import static com.example.sampletravelapp.Model.OrderBy.TRAVEL_DURATION;
+
 public class SearchBusActivity extends AppCompatActivity {
 
     private AppViewModel appViewModel;
@@ -63,8 +69,8 @@ public class SearchBusActivity extends AppCompatActivity {
 
         appViewModel = new ViewModelProvider(this).get(
                 AppViewModel.class);
-        if(savedInstanceState == null) {
-            appViewModel.setBusFilterOptions(getIntent().getParcelableExtra("busFilterOptions"));
+        if (savedInstanceState == null) {
+            appViewModel.setBusFilterSortOptions(getIntent().getParcelableExtra("busFilterOptions"));
         }
         appViewModel.getSearchForStartStopLocationMediator().observe(this, journeys
                 -> {
@@ -89,8 +95,8 @@ public class SearchBusActivity extends AppCompatActivity {
                 journeyCal.set(Calendar.MINUTE, tripCal.get(Calendar.MINUTE));
                 journeyCal.set(Calendar.SECOND, tripCal.get(Calendar.SECOND));
                 Date finalJourneyDate = journeyCal.getTime();
-                if(finalJourneyDate.getTime() < new Date().getTime()) {
-                    Toast.makeText(SearchBusActivity.this,"Cannot book for this time slot",
+                if (finalJourneyDate.getTime() < new Date().getTime()) {
+                    Toast.makeText(SearchBusActivity.this, "Cannot book for this time slot",
                             Toast.LENGTH_SHORT).show();
                     return;
                 }
@@ -112,13 +118,13 @@ public class SearchBusActivity extends AppCompatActivity {
         });
         appViewModel.getAllBusAttributes().observe(this, filters ->
                 appViewModel.getItemsForNameOrderBy(startLocation.id,
-                endLocation.id,
-                        appViewModel.getBusFilterOptions().getBusFilters(),
-                        appViewModel.getBusFilterOptions().getBusType(),
-                        appViewModel.getBusFilterOptions().getBusOperators(),
-                        appViewModel.getBusFilterOptions().getBusDepartureTimeRange(),
-                        appViewModel.getBusFilterOptions().getBusArrivalTimeRange(),
-                appViewModel.getOrderBy()));
+                        endLocation.id,
+                        appViewModel.getBusFilterSortOptions().getBusFilters(),
+                        appViewModel.getBusFilterSortOptions().getBusType(),
+                        appViewModel.getBusFilterSortOptions().getBusOperators(),
+                        appViewModel.getBusFilterSortOptions().getBusDepartureTimeRange(),
+                        appViewModel.getBusFilterSortOptions().getBusArrivalTimeRange(),
+                        appViewModel.getBusFilterSortOptions().getBusOrderBy()));
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         listItemView.setLayoutManager(layoutManager);
         listItemView.setItemAnimator(null);
@@ -126,9 +132,9 @@ public class SearchBusActivity extends AppCompatActivity {
 
         ImageView busFilterButton = findViewById(R.id.bus_filter_button);
         busFilterButton.setOnClickListener((View.OnClickListener) view -> {
-            FilterDialogFragment newFragment = FilterDialogFragment.newInstance(appViewModel.getBusFilterOptions());
+            FilterDialogFragment newFragment = FilterDialogFragment.newInstance(appViewModel.getBusFilterSortOptions());
             newFragment.viewItemListener = busFilterOptions -> {
-                appViewModel.setBusFilterOptions(busFilterOptions);
+                appViewModel.setBusFilterSortOptions(busFilterOptions);
                 appViewModel.getItemsForNameOrderBy(startLocation.id,
                         endLocation.id,
                         busFilterOptions.getBusFilters(),
@@ -136,28 +142,32 @@ public class SearchBusActivity extends AppCompatActivity {
                         busFilterOptions.getBusOperators(),
                         busFilterOptions.getBusDepartureTimeRange(),
                         busFilterOptions.getBusArrivalTimeRange(),
-                        appViewModel.getOrderBy());
+                        appViewModel.getBusFilterSortOptions().getBusOrderBy());
             };
             newFragment.show(getSupportFragmentManager(), "FilterAndSortDialogFragment");
         });
 
         ImageView busSortButton = findViewById(R.id.bus_sort_button);
         busSortButton.setOnClickListener((View.OnClickListener) view -> {
-            final String[] ordering = new String[4];
+            final String[] ordering = new String[5];
             int selectedIndxForOrdering = 0;
-            ordering[0] = "Rating";
-            ordering[1] = "Price";
-            ordering[2] = "Deparature Time";
-            ordering[3] = "Travel Duration";
-            switch (appViewModel.getOrderBy()) {
-                case PRICE:
+            ordering[0] = "Relevance";
+            ordering[1] = "Rating";
+            ordering[2] = "Price";
+            ordering[3] = "Deparature Time";
+            ordering[4] = "Travel Duration";
+            switch (appViewModel.getBusFilterSortOptions().getBusOrderBy()) {
+                case RATING:
                     selectedIndxForOrdering = 1;
                     break;
-                case DEPARTURE_TIME:
+                case PRICE:
                     selectedIndxForOrdering = 2;
                     break;
-                case TRAVEL_DURATION:
+                case DEPARTURE_TIME:
                     selectedIndxForOrdering = 3;
+                    break;
+                case TRAVEL_DURATION:
+                    selectedIndxForOrdering = 4;
                     break;
                 default:
                     selectedIndxForOrdering = 0;
@@ -167,27 +177,30 @@ public class SearchBusActivity extends AppCompatActivity {
             mBuilder.setSingleChoiceItems(ordering, selectedIndxForOrdering, (dialogInterface, i) -> {
                 switch (i) {
                     case 1:
-                        appViewModel.setOrderBy(OrderBy.PRICE);
+                        appViewModel.getBusFilterSortOptions().setBusOrderBy(RATING);
                         break;
                     case 2:
-                        appViewModel.setOrderBy(OrderBy.DEPARTURE_TIME);
+                        appViewModel.getBusFilterSortOptions().setBusOrderBy(PRICE);
                         break;
                     case 3:
-                        appViewModel.setOrderBy(OrderBy.TRAVEL_DURATION);
+                        appViewModel.getBusFilterSortOptions().setBusOrderBy(DEPARTURE_TIME);
+                        break;
+                    case 4:
+                        appViewModel.getBusFilterSortOptions().setBusOrderBy(TRAVEL_DURATION);
                         break;
                     default:
-                        appViewModel.setOrderBy(OrderBy.RATING);
+                        appViewModel.getBusFilterSortOptions().setBusOrderBy(RELEVANCE);
                 }
             });
             mBuilder.setPositiveButton("OK", (dialog, which) -> {
                 appViewModel.getItemsForNameOrderBy(startLocation.id,
                         endLocation.id,
-                        appViewModel.getBusFilterOptions().getBusFilters(),
-                        appViewModel.getBusFilterOptions().getBusType(),
-                        appViewModel.getBusFilterOptions().getBusOperators(),
-                        appViewModel.getBusFilterOptions().getBusDepartureTimeRange(),
-                        appViewModel.getBusFilterOptions().getBusArrivalTimeRange(),
-                        appViewModel.getOrderBy());
+                        appViewModel.getBusFilterSortOptions().getBusFilters(),
+                        appViewModel.getBusFilterSortOptions().getBusType(),
+                        appViewModel.getBusFilterSortOptions().getBusOperators(),
+                        appViewModel.getBusFilterSortOptions().getBusDepartureTimeRange(),
+                        appViewModel.getBusFilterSortOptions().getBusArrivalTimeRange(),
+                        appViewModel.getBusFilterSortOptions().getBusOrderBy());
             });
             AlertDialog mDialog = mBuilder.create();
             mDialog.show();

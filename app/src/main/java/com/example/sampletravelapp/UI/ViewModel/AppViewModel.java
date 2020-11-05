@@ -7,13 +7,10 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MediatorLiveData;
 import androidx.lifecycle.MutableLiveData;
-import androidx.sqlite.db.SimpleSQLiteQuery;
 
 
 import com.example.sampletravelapp.App;
-import com.example.sampletravelapp.Model.Bus;
-import com.example.sampletravelapp.Model.BusAttributes;
-import com.example.sampletravelapp.Model.BusFilterOptions;
+import com.example.sampletravelapp.Model.BusFilterSortOptions;
 import com.example.sampletravelapp.Model.BusWithAttributes;
 import com.example.sampletravelapp.Model.Journey;
 import com.example.sampletravelapp.Model.JourneyBusPlace;
@@ -24,7 +21,6 @@ import com.example.sampletravelapp.Model.Place;
 import com.example.sampletravelapp.Model.TimeRange;
 import com.example.sampletravelapp.Repository;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class AppViewModel extends AndroidViewModel {
@@ -38,31 +34,21 @@ public class AppViewModel extends AndroidViewModel {
     private LiveData<List<JourneyBusPlace>> searchForStartEndLocation =
             new MutableLiveData<>();
 
-    private OrderBy orderBy = OrderBy.RATING;
-    private BusFilterOptions busFilterOptions;
+    private BusFilterSortOptions busFilterSortOptions;
 
     public AppViewModel(@NonNull Application application) {
         super(application);
         mRepository = ((App) application).getRepository();
-        busFilterOptions = new BusFilterOptions();
+        busFilterSortOptions = new BusFilterSortOptions();
     }
 
-    public BusFilterOptions getBusFilterOptions() {
-        return busFilterOptions;
+    public BusFilterSortOptions getBusFilterSortOptions() {
+        return busFilterSortOptions;
     }
 
-    public void setBusFilterOptions(BusFilterOptions busFilterOptions) {
-        this.busFilterOptions = busFilterOptions;
+    public void setBusFilterSortOptions(BusFilterSortOptions busFilterSortOptions) {
+        this.busFilterSortOptions = busFilterSortOptions;
     }
-
-    public OrderBy getOrderBy() {
-        return orderBy;
-    }
-
-    public void setOrderBy(OrderBy orderBy) {
-        this.orderBy = orderBy;
-    }
-
 
     public LiveData<List<Journey>> getAllJournies() {
         return mRepository.getAllJournies();
@@ -114,7 +100,7 @@ public class AppViewModel extends AndroidViewModel {
                                        List<String> busOperators,
                                        List<TimeRange> departureTimeRange,
                                        List<TimeRange> arrivalTimeRange,
-                                       OrderBy orderBy) {
+                                       @OrderBy int orderBy) {
         if (searchForStartEndLocation != null) {
             searchForStartStopMediator.removeSource(searchForStartEndLocation);
         }
