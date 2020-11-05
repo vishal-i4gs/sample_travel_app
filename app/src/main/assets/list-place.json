@@ -1,18 +1,18 @@
 [
   {
     "id": "place1",
-    "name": "Place #1"
+    "name": "Bangalore"
   },
   {
     "id": "place2",
-    "name": "Place #2"
+    "name": "Chennai"
   },
   {
     "id": "place3",
-    "name": "Place #3"
+    "name": "Mangalore"
   },
   {
     "id": "place4",
-    "name": "Place #4"
+    "name": "Hyderabad"
   }
 ]
