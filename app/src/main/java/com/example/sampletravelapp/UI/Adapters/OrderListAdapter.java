@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.sampletravelapp.Model.JourneyBusPlaceOrder;
 import com.example.sampletravelapp.Model.OrderItem;
 import com.example.sampletravelapp.R;
 import com.example.sampletravelapp.UI.ItemClickListener;
@@ -24,9 +25,9 @@ public class OrderListAdapter extends
         this.itemClickListener = itemClickListener;
     }
 
-    private List<OrderItem> list = new ArrayList<>();
+    private List<JourneyBusPlaceOrder> list = new ArrayList<>();
 
-    public void setList(List<OrderItem> list) {
+    public void setList(List<JourneyBusPlaceOrder> list) {
         this.list = list;
         notifyDataSetChanged();
     }
