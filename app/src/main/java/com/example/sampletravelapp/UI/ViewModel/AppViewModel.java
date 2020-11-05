@@ -75,7 +75,7 @@ public class AppViewModel extends AndroidViewModel {
         return mRepository.getOrderItems();
     }
 
-    public LiveData<OrderItem> getOrderItem(String orderItemId) {
+    public LiveData<JourneyBusPlaceOrder> getOrderItem(String orderItemId) {
         return mRepository.getOrderItem(orderItemId);
     }
 

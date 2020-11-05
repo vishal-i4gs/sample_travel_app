@@ -26,5 +26,5 @@ public interface OrderDao {
     void update(@OrderStatus int active, String orderId);
 
     @Query("select * from orders where orderId = :orderId")
-    LiveData<OrderItem> loadOrder(String orderId);
+    LiveData<JourneyBusPlaceOrder> loadOrder(String orderId);
 }

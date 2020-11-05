@@ -269,7 +269,7 @@ public class Repository {
     }
 
     //Order Related Opertions/Methods
-    public LiveData<OrderItem> getOrderItem(String orderItemId) {
+    public LiveData<JourneyBusPlaceOrder> getOrderItem(String orderItemId) {
         return mDatabase.orderDao().loadOrder(orderItemId);
     }
 
