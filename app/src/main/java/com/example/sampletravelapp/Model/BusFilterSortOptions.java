@@ -6,7 +6,7 @@ import android.os.Parcelable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BusFilterOptions implements Parcelable {
+public class BusFilterSortOptions implements Parcelable {
 
     private static final int HAS_DATA = 0x01;
     private static final int WITHOUT_DATA = 0x00;
@@ -16,6 +16,7 @@ public class BusFilterOptions implements Parcelable {
     private List<String> busOperators;
     private List<TimeRange> busDepartureTimeRange;
     private List<TimeRange> busArrivalTimeRange;
+    private @OrderBy int busOrderBy;
 
     public List<String> getBusType() {
         return busType;
@@ -41,6 +42,14 @@ public class BusFilterOptions implements Parcelable {
         this.busOperators = busOperators;
     }
 
+    public int getBusOrderBy() {
+        return busOrderBy;
+    }
+
+    public void setBusOrderBy(int busOrderBy) {
+        this.busOrderBy = busOrderBy;
+    }
+
     public List<TimeRange> getBusDepartureTimeRange() {
         return busDepartureTimeRange;
     }
@@ -57,12 +66,13 @@ public class BusFilterOptions implements Parcelable {
         this.busArrivalTimeRange = busArrivalTimeRange;
     }
 
-    public BusFilterOptions() {
+    public BusFilterSortOptions() {
         busType = new ArrayList<>();
         busFilters = new ArrayList<>();
         busOperators = new ArrayList<>();
         busDepartureTimeRange = new ArrayList<>();
         busArrivalTimeRange = new ArrayList<>();
+        busOrderBy = OrderBy.RELEVANCE;
     }
 
     public void clear() {
@@ -73,7 +83,7 @@ public class BusFilterOptions implements Parcelable {
         busArrivalTimeRange.clear();
     }
 
-    protected BusFilterOptions(Parcel in) {
+    protected BusFilterSortOptions(Parcel in) {
         if (in.readByte() == HAS_DATA) {
             busType = new ArrayList<>();
             in.readList(busType, String.class.getClassLoader());
@@ -106,15 +116,15 @@ public class BusFilterOptions implements Parcelable {
         }
     }
 
-    public static final Creator<BusFilterOptions> CREATOR = new Creator<BusFilterOptions>() {
+    public static final Creator<BusFilterSortOptions> CREATOR = new Creator<BusFilterSortOptions>() {
         @Override
-        public BusFilterOptions createFromParcel(Parcel in) {
-            return new BusFilterOptions(in);
+        public BusFilterSortOptions createFromParcel(Parcel in) {
+            return new BusFilterSortOptions(in);
         }
 
         @Override
-        public BusFilterOptions[] newArray(int size) {
-            return new BusFilterOptions[size];
+        public BusFilterSortOptions[] newArray(int size) {
+            return new BusFilterSortOptions[size];
         }
     };
 
