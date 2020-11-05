@@ -1,5 +1,6 @@
 package com.example.sampletravelapp.UI.Activity;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
@@ -73,14 +74,17 @@ public class OrderActivity extends AppCompatActivity {
                 }
                 JourneyBusPlaceOrder orderItem = orderItems.get(position);
                 if(orderItem.order.active != OrderStatus.CANCELED && (new Date().getTime() < orderItem.order.journeyDate.getTime())) {
-                    new AlertDialog.Builder(OrderActivity.this)
-                            .setTitle("Cancel ticket")
-                            .setMessage("Are you sure you want to cancel this ticket?")
-                            .setPositiveButton(android.R.string.yes, (dialog, which) -> {
-                                appViewModel.removeOrderItem(orderItem.order);
-                            })
-                            .setNegativeButton(android.R.string.no, null)
-                            .show();
+                    Intent intent = new Intent(OrderActivity.this, TicketViewActivity.class);
+                    intent.putExtra("orderItemId",orderItem.order.orderId);
+                    startActivity(intent);
+//                    new AlertDialog.Builder(OrderActivity.this)
+//                            .setTitle("Cancel ticket")
+//                            .setMessage("Are you sure you want to cancel this ticket?")
+//                            .setPositiveButton(android.R.string.yes, (dialog, which) -> {
+//                                appViewModel.removeOrderItem(orderItem.order);
+//                            })
+//                            .setNegativeButton(android.R.string.no, null)
+//                            .show();
                 }
             }
         });
