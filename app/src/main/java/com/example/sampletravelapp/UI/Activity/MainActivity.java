@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.sampletravelapp.Model.BusFilterOptions;
 import com.example.sampletravelapp.Model.Place;
 import com.example.sampletravelapp.R;
 import com.example.sampletravelapp.UI.Fragment.SearchDialogFragment;
@@ -21,8 +22,10 @@ import com.example.sampletravelapp.UI.Fragment.SearchDialogFragment;
 import java.io.Serializable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
@@ -37,7 +40,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_main);
 
         ImageView myBookingsButton = findViewById(R.id.my_booking_button);
@@ -104,9 +106,18 @@ public class MainActivity extends AppCompatActivity {
             if (TextUtils.isEmpty(sourcePlace.id) || TextUtils.isEmpty(destinationPlace.id)) {
                 return;
             }
+            if(sourcePlace.id.equals(destinationPlace.id)) {
+                return;
+            }
             intent.putExtra("startLoc", (Serializable) sourcePlace);
             intent.putExtra("endLoc", (Serializable) destinationPlace);
             intent.putExtra("date", selectedDateInt);
+            BusFilterOptions busFilterOptions = new BusFilterOptions();
+            List<String> busTypes = new ArrayList<>();
+            List<String> busFilters = new ArrayList<>();
+            busFilterOptions.setBusType(busTypes);
+            busFilterOptions.setBusFilters(busFilters);
+            intent.putExtra("busFilterOptions",busFilterOptions);
             startActivity(intent);
         });
     }
