@@ -8,20 +8,22 @@ import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 
 
+import com.example.sampletravelapp.Model.JourneyBusPlaceOrder;
 import com.example.sampletravelapp.Model.OrderItem;
+import com.example.sampletravelapp.Model.OrderStatus;
 
 import java.util.List;
 
 @Dao
 public interface OrderDao {
     @Query("SELECT * FROM orders ORDER BY orderTime DESC")
-    LiveData<List<OrderItem>> loadAllOrders();
+    LiveData<List<JourneyBusPlaceOrder>> loadAllOrders();
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insert(OrderItem orderItem);
 
     @Query("UPDATE orders SET active=:active WHERE orderId = :orderId")
-    void update(boolean active, String orderId);
+    void update(@OrderStatus int active, String orderId);
 
     @Query("select * from orders where orderId = :orderId")
     LiveData<OrderItem> loadOrder(String orderId);
