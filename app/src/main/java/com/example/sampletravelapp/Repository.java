@@ -140,7 +140,7 @@ public class Repository {
         Observer observer = new Observer<List<JourneyBusPlaceOrder>>() {
             @Override
             public void onChanged(List<JourneyBusPlaceOrder> journeyBusPlaceOrders) {
-                if(journeyBusPlaceOrders.size() > 0) {
+                if (journeyBusPlaceOrders.size() > 0) {
                     List<Integer> generated = new ArrayList<Integer>();
                     int totalNumberOfOffers = (int) (journeyBusPlaceOrders.size() * 0.3);
                     for (int i = 0; i < totalNumberOfOffers; i++) {
@@ -158,7 +158,7 @@ public class Repository {
                         int randomNumber = generated.get(counter);
                         JourneyBusPlaceOrder journeyBusPlaceOrder = journeyBusPlaceOrders.get(randomNumber);
                         appExecutors.diskIO().execute(() -> {
-                            if(journeyBusPlaceOrder.order.active == OrderStatus.ON_SCHEDULE) {
+                            if (journeyBusPlaceOrder.order.active == OrderStatus.ON_SCHEDULE) {
                                 mDatabase.orderDao().update(OrderStatus.DELAYED, journeyBusPlaceOrder.order.orderId);
                             }
                         });
@@ -189,7 +189,7 @@ public class Repository {
             List<String> busOperators,
             List<TimeRange> departureTimeRange,
             List<TimeRange> arrivalTimeRange,
-            OrderBy orderBy) {
+            @OrderBy int orderBy) {
 
         StringBuilder stringBuilder = new StringBuilder();
         List<Object> args = new ArrayList();
@@ -261,6 +261,8 @@ public class Repository {
             stringBuilder.append(" ORDER BY startTime ASC");
         } else if (orderBy == OrderBy.TRAVEL_DURATION) {
             stringBuilder.append(" ORDER BY duration ASC");
+        } else if (orderBy == OrderBy.RELEVANCE) {
+            stringBuilder.append(" ORDER BY travels ASC");
         }
         stringBuilder.append(";");
         return mDatabase.journayDao().getJourneyRawQuery(new SimpleSQLiteQuery(stringBuilder.toString(), args.toArray()));
