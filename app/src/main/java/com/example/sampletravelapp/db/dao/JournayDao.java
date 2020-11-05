@@ -5,8 +5,12 @@ import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
+import androidx.room.RawQuery;
 import androidx.room.Transaction;
+import androidx.sqlite.db.SupportSQLiteQuery;
 
+import com.example.sampletravelapp.Model.Bus;
+import com.example.sampletravelapp.Model.BusAttributes;
 import com.example.sampletravelapp.Model.Journey;
 import com.example.sampletravelapp.Model.JourneyBusPlace;
 
@@ -35,14 +39,16 @@ public interface JournayDao {
     @Query("SELECT * FROM journey WHERE startLocation = :startLocation AND endLocation = :endLocation")
     LiveData<List<JourneyBusPlace>> getJourneyForStartAndEndLocation(String startLocation, String endLocation);
 
+    @Query("SELECT * FROM journey JOIN bus ON bus.id = journey.busId JOIN busAttributes ON busAttributes.busId = journey.busId WHERE startLocation = :startLocation AND endLocation = :endLocation AND travelClass IN (:filters) AND type IN (:busType)")
+    LiveData<List<JourneyBusPlace>> getJourneyForStartAndEndLocationWithFilters(String startLocation, String endLocation, List<String> filters, List<String> busType);
 
-    @Query("SELECT * FROM journey JOIN bus ON bus.id = busId WHERE startLocation = :startLocation AND endLocation = :endLocation AND type IN (:filters)")
-    LiveData<List<JourneyBusPlace>> getJourneyForStartAndEndLocationWithFilters(String startLocation, String endLocation, List<String> filters);
+    @Query("SELECT * FROM journey JOIN bus ON bus.id = journey.busId JOIN busAttributes ON busAttributes.busId = journey.busId WHERE startLocation = :startLocation AND endLocation = :endLocation AND travelClass  IN (:filters) AND type IN (:busType) ORDER BY bus.starRating DESC")
+    LiveData<List<JourneyBusPlace>> getJourneyForStartAndEndLocationWithFiltersAndSortByRating(String startLocation, String endLocation, List<String> filters, List<String> busType);
 
-    @Query("SELECT * FROM journey JOIN bus ON bus.id = busId WHERE startLocation = :startLocation AND endLocation = :endLocation AND type IN (:filters) ORDER BY bus.starRating DESC")
-    LiveData<List<JourneyBusPlace>> getJourneyForStartAndEndLocationWithFiltersAndSortByRating(String startLocation, String endLocation, List<String> filters);
+    @Query("SELECT * FROM journey JOIN bus ON bus.id = journey.busId JOIN busAttributes ON busAttributes.busId = journey.busId WHERE startLocation = :startLocation AND endLocation = :endLocation AND travelClass  IN (:filters) AND type IN (:busType) ORDER BY price ASC")
+    LiveData<List<JourneyBusPlace>> getJourneyForStartAndEndLocationWithFiltersAndSortByPrice(String startLocation, String endLocation, List<String> filters, List<String> busType);
 
-    @Query("SELECT * FROM journey JOIN bus ON bus.id = busId WHERE startLocation = :startLocation AND endLocation = :endLocation AND type IN (:filters) ORDER BY price ASC")
-    LiveData<List<JourneyBusPlace>> getJourneyForStartAndEndLocationWithFiltersAndSortByPrice(String startLocation, String endLocation, List<String> filters);
+    @RawQuery(observedEntities = {Journey.class, Bus.class, BusAttributes.class})
+    LiveData<List<JourneyBusPlace>> getJourneyRawQuery(SupportSQLiteQuery query);
 }
 
