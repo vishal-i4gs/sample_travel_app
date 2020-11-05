@@ -6,6 +6,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.sampletravelapp.Model.BusAttributes;
 import com.example.sampletravelapp.Model.JourneyBusPlace;
 import com.example.sampletravelapp.R;
 import com.example.sampletravelapp.UI.ItemClickListener;
@@ -43,23 +44,17 @@ public class JourneyViewHolder extends RecyclerView.ViewHolder {
 
     public void setData(JourneyBusPlace journeyBusPlace) {
         this.journeyBusPlace = journeyBusPlace;
-        SimpleDateFormat dateFormat = new SimpleDateFormat("hh:mm",Locale.ENGLISH);
-        String startTime = String.format(Locale.ENGLISH,"%02d:%02d",
-                journeyBusPlace.journey.startHours, journeyBusPlace.journey.startMinutes);
-        Date startDateTime = null;
-        try {
-            startDateTime = dateFormat.parse(startTime);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        Date expireDate = new Date(startDateTime.getTime() + journeyBusPlace.journey.duration*1000);
         SimpleDateFormat  dateformatFinal = new SimpleDateFormat("hh:mm aa",Locale.ENGLISH);
-        String strDate = dateformatFinal.format(startDateTime);
-        String endDate = dateformatFinal.format(expireDate);
+        String strDate = dateformatFinal.format(journeyBusPlace.journey.startTime);
+        String endDate = dateformatFinal.format(journeyBusPlace.journey.endTime);
         String journeyTimeInfo = strDate + " - " + endDate;
+        long a = journeyBusPlace.journey.startTime.getTime();
         journeyTimeInformation.setText(journeyTimeInfo);
-        busName.setText(journeyBusPlace.bus.name);
+        busName.setText(String.format(Locale.ENGLISH,"%s, %s",journeyBusPlace.bus.name,journeyBusPlace.bus.travels));
         busType.setText(journeyBusPlace.bus.type);
+        for(BusAttributes attributes:journeyBusPlace.busAttributesList) {
+            busType.setText(String.format(Locale.ENGLISH,"%s %s",busType.getText().toString(),attributes.travelClass));
+        }
         journeyPrice.setText(String.format(Locale.ENGLISH,"Rs %d", journeyBusPlace.journey.price));
         journeyDuration.setText(String.format(Locale.ENGLISH,"%02d hours %02d min",
                 (journeyBusPlace.journey.duration / 3600),
