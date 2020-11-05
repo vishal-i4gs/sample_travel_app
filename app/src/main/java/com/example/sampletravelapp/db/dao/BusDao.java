@@ -8,6 +8,7 @@ import androidx.room.Query;
 import androidx.room.Transaction;
 
 import com.example.sampletravelapp.Model.Bus;
+import com.example.sampletravelapp.Model.BusWithAttributes;
 
 import java.util.List;
 
@@ -16,7 +17,7 @@ public interface BusDao {
 
     @Transaction
     @Query("SELECT * FROM bus")
-    LiveData<List<Bus>> getAllBuses();
+    LiveData<List<BusWithAttributes>> getAllBuses();
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insert(List<Bus> items);
