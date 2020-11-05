@@ -3,6 +3,8 @@ package com.example.sampletravelapp.Model;
 import androidx.room.Embedded;
 import androidx.room.Relation;
 
+import java.util.List;
+
 public class JourneyBusPlace {
     @Embedded
     public Journey journey;
@@ -12,6 +14,11 @@ public class JourneyBusPlace {
             entity = Bus.class
     )
     public Bus bus;
+    @Relation(
+            parentColumn = "busId",
+            entityColumn = "busId"
+    )
+    public List<BusAttributes> busAttributesList;
     @Relation(
             parentColumn = "startLocation",
             entityColumn = "id",

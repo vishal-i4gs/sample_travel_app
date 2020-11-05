@@ -1,24 +1,32 @@
 package com.example.sampletravelapp.Model;
 
 import androidx.annotation.NonNull;
+import androidx.room.ColumnInfo;
 import androidx.room.Entity;
+import androidx.room.ForeignKey;
 import androidx.room.PrimaryKey;
 
 import java.util.Date;
 
-@Entity(tableName = "journey")
+@Entity(tableName = "journey",
+        foreignKeys = @ForeignKey(entity = Bus.class,
+                parentColumns = "id",
+                childColumns = "busId",
+                onDelete = ForeignKey.CASCADE))
 public class Journey {
 
     @PrimaryKey
     @NonNull
-    public int id;
+    public long journeyId;
     public Date date;
     public String startLocation;
     public String endLocation;
-    public int startHours;
-    public int startMinutes;
+
+    @ColumnInfo(name = "busId", index = true)
     public String busId;
+
     public long duration;
     public long price;
-
+    public Date startTime;
+    public Date endTime;
 }

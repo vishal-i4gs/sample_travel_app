@@ -14,6 +14,7 @@ public class OrderItem implements Serializable {
     @NonNull
     public String orderId;
     public Date orderTime;
-    public JourneyBusPlace journeyBusPlace;
-    public boolean active;
+    public long journeyId;
+    public @OrderStatus int active;
+    public Date journeyDate;
 }

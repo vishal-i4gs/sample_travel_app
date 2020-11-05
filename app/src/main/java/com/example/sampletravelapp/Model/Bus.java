@@ -11,6 +11,7 @@ public class Bus {
     @NonNull
     public String id;
     public String name;
-    public String type;
+    public String travels;
     public float starRating;
+    public String type;
 }
