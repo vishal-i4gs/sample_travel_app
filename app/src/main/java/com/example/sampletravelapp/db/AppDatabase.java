@@ -10,18 +10,20 @@ import androidx.room.TypeConverters;
 
 import com.example.sampletravelapp.AppExecutors;
 import com.example.sampletravelapp.Model.Bus;
+import com.example.sampletravelapp.Model.BusAttributes;
 import com.example.sampletravelapp.Model.Journey;
 import com.example.sampletravelapp.Model.OrderItem;
 import com.example.sampletravelapp.Model.Place;
 import com.example.sampletravelapp.db.Convertors.DateConverter;
 import com.example.sampletravelapp.db.Convertors.JourneyBusPlaceConvertor;
+import com.example.sampletravelapp.db.dao.BusAttributeDao;
 import com.example.sampletravelapp.db.dao.BusDao;
 import com.example.sampletravelapp.db.dao.JournayDao;
 import com.example.sampletravelapp.db.dao.OrderDao;
 import com.example.sampletravelapp.db.dao.PlaceDao;
 
-@Database(entities = {OrderItem.class, Journey.class, Bus.class, Place.class}, version = 1)
-@TypeConverters({JourneyBusPlaceConvertor.class, DateConverter.class})
+@Database(entities = {OrderItem.class, Journey.class, Bus.class, Place.class, BusAttributes.class}, version = 1)
+@TypeConverters({DateConverter.class})
 public abstract class AppDatabase extends RoomDatabase {
 
     private static AppDatabase sInstance;
@@ -36,6 +38,8 @@ public abstract class AppDatabase extends RoomDatabase {
     public abstract BusDao busDao();
 
     public abstract PlaceDao placeDao();
+
+    public abstract BusAttributeDao busAttributeDao();
 
     public static AppDatabase getInstance(final Context context, final AppExecutors executors) {
         if (sInstance == null) {
