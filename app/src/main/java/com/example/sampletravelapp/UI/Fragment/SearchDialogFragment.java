@@ -58,7 +58,7 @@ public class SearchDialogFragment extends DialogFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (savedInstanceState != null) dismiss();
-        setStyle(DialogFragment.STYLE_NORMAL, R.style.full_screen_dialog);
+        setStyle(DialogFragment.STYLE_NO_TITLE, R.style.full_screen_dialog);
     }
 
     @Override
