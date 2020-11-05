@@ -16,7 +16,7 @@ import androidx.fragment.app.DialogFragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.example.sampletravelapp.Model.BusFilterOptions;
+import com.example.sampletravelapp.Model.BusFilterSortOptions;
 import com.example.sampletravelapp.Model.BusWithAttributes;
 import com.example.sampletravelapp.Model.TimeRange;
 import com.example.sampletravelapp.R;
@@ -45,7 +45,7 @@ public class FilterDialogFragment extends DialogFragment {
     private List<Boolean> selectedBusDepartureTimeRange = new ArrayList<>();
     private List<Boolean> selectedBusArrivalTimeRange = new ArrayList<>();
 
-    private BusFilterOptions busFilterOptions;
+    private BusFilterSortOptions busFilterSortOptions;
 
     TextView busTypeSelectedTextView;
     TextView busOperatorSelectedTextView;
@@ -53,14 +53,14 @@ public class FilterDialogFragment extends DialogFragment {
     TextView arrivalTimeRangeSelectedTextView;
 
     public interface ViewItemListener {
-        public void onFilterChanged(BusFilterOptions busFilterOptions);
+        public void onFilterChanged(BusFilterSortOptions busFilterSortOptions);
     }
 
-    public static FilterDialogFragment newInstance(BusFilterOptions busFilterOptions) {
+    public static FilterDialogFragment newInstance(BusFilterSortOptions busFilterSortOptions) {
         FilterDialogFragment myFragment = new FilterDialogFragment();
-        myFragment.busFilterOptions = new BusFilterOptions();
+        myFragment.busFilterSortOptions = new BusFilterSortOptions();
         Bundle args = new Bundle();
-        args.putParcelable("busFilterOptions", busFilterOptions);
+        args.putParcelable("busFilterOptions", busFilterSortOptions);
         myFragment.setArguments(args);
 
         return myFragment;
@@ -115,13 +115,13 @@ public class FilterDialogFragment extends DialogFragment {
                         }
                     }
                 }
-                busFilterOptions.setBusFilters(finalBusFilters);
-                busFilterOptions.setBusType(busTypes);
-                int totalCount = busFilterOptions.getBusFilters().size() + busFilterOptions.getBusType().size();
+                busFilterSortOptions.setBusFilters(finalBusFilters);
+                busFilterSortOptions.setBusType(busTypes);
+                int totalCount = busFilterSortOptions.getBusFilters().size() + busFilterSortOptions.getBusType().size();
                 if (totalCount > 0) {
                     busTypeSelectedTextView.setVisibility(View.VISIBLE);
                     busTypeSelectedTextView.setText(String.format(Locale.ENGLISH,
-                            "%d Selected", busFilterOptions.getBusFilters().size() + busFilterOptions.getBusType().size()));
+                            "%d Selected", busFilterSortOptions.getBusFilters().size() + busFilterSortOptions.getBusType().size()));
                 } else {
                     busTypeSelectedTextView.setVisibility(View.GONE);
                 }
@@ -150,8 +150,8 @@ public class FilterDialogFragment extends DialogFragment {
                         finalBusOperators.add(busOperatorFilters.get(i));
                     }
                 }
-                busFilterOptions.setBusOperators(finalBusOperators);
-                int totalCount = busFilterOptions.getBusOperators().size();
+                busFilterSortOptions.setBusOperators(finalBusOperators);
+                int totalCount = busFilterSortOptions.getBusOperators().size();
                 if (totalCount > 0) {
                     busOperatorSelectedTextView.setVisibility(View.VISIBLE);
                     busOperatorSelectedTextView.setText(String.format(Locale.ENGLISH,
@@ -184,8 +184,8 @@ public class FilterDialogFragment extends DialogFragment {
                         finalDeparatureTimeRange.add(timeRanges.get(i));
                     }
                 }
-                busFilterOptions.setBusDepartureTimeRange(finalDeparatureTimeRange);
-                int totalCount = busFilterOptions.getBusDepartureTimeRange().size();
+                busFilterSortOptions.setBusDepartureTimeRange(finalDeparatureTimeRange);
+                int totalCount = busFilterSortOptions.getBusDepartureTimeRange().size();
                 if (totalCount > 0) {
                     departureTimeRangeSelectedTextView.setVisibility(View.VISIBLE);
                     departureTimeRangeSelectedTextView.setText(String.format(Locale.ENGLISH,
@@ -217,8 +217,8 @@ public class FilterDialogFragment extends DialogFragment {
                         finalArrivalTimeRange.add(timeRanges.get(i));
                     }
                 }
-                busFilterOptions.setBusArrivalTimeRange(finalArrivalTimeRange);
-                int totalCount = busFilterOptions.getBusArrivalTimeRange().size();
+                busFilterSortOptions.setBusArrivalTimeRange(finalArrivalTimeRange);
+                int totalCount = busFilterSortOptions.getBusArrivalTimeRange().size();
                 if (totalCount > 0) {
                     arrivalTimeRangeSelectedTextView.setVisibility(View.VISIBLE);
                     arrivalTimeRangeSelectedTextView.setText(String.format(Locale.ENGLISH,
@@ -236,7 +236,7 @@ public class FilterDialogFragment extends DialogFragment {
         applyView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                viewItemListener.onFilterChanged(busFilterOptions);
+                viewItemListener.onFilterChanged(busFilterSortOptions);
                 dismiss();
             }
         });
@@ -245,8 +245,8 @@ public class FilterDialogFragment extends DialogFragment {
         resetView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                busFilterOptions.clear();
-                viewItemListener.onFilterChanged(busFilterOptions);
+                busFilterSortOptions.clear();
+                viewItemListener.onFilterChanged(busFilterSortOptions);
                 dismiss();
             }
         });
@@ -264,7 +264,7 @@ public class FilterDialogFragment extends DialogFragment {
         appViewModel = new ViewModelProvider(this).get(
                 AppViewModel.class);
         if (getArguments() != null) {
-            busFilterOptions = getArguments().getParcelable("busFilterOptions");
+            busFilterSortOptions = getArguments().getParcelable("busFilterOptions");
         }
         appViewModel.getAllBusAttributes().observe(getViewLifecycleOwner(), new Observer<List<String>>() {
             @Override
@@ -283,21 +283,21 @@ public class FilterDialogFragment extends DialogFragment {
                         finalBusFilters.add(busFilters.get(i));
                     }
                 }
-                if (busFilterOptions != null) {
-                    for (String busType : busFilterOptions.getBusType()) {
+                if (busFilterSortOptions != null) {
+                    for (String busType : busFilterSortOptions.getBusType()) {
                         int index = busFilters.indexOf(busType);
                         selectedBusFilters.set(index, true);
                     }
-                    for (String busType : busFilterOptions.getBusFilters()) {
+                    for (String busType : busFilterSortOptions.getBusFilters()) {
                         int index = busFilters.indexOf(busType);
                         selectedBusFilters.set(index, true);
                     }
                 }
-                int totalCount = busFilterOptions.getBusFilters().size() + busFilterOptions.getBusType().size();
+                int totalCount = busFilterSortOptions.getBusFilters().size() + busFilterSortOptions.getBusType().size();
                 if (totalCount > 0) {
                     busTypeSelectedTextView.setVisibility(View.VISIBLE);
                     busTypeSelectedTextView.setText(String.format(Locale.ENGLISH,
-                            "%d Selected", busFilterOptions.getBusFilters().size() + busFilterOptions.getBusType().size()));
+                            "%d Selected", busFilterSortOptions.getBusFilters().size() + busFilterSortOptions.getBusType().size()));
                 } else {
                     busTypeSelectedTextView.setVisibility(View.GONE);
                 }
@@ -312,13 +312,13 @@ public class FilterDialogFragment extends DialogFragment {
                     selectedBusOperatorFilters.add(false);
                 }
 
-                if (busFilterOptions != null) {
-                    for (String busOperator : busFilterOptions.getBusOperators()) {
+                if (busFilterSortOptions != null) {
+                    for (String busOperator : busFilterSortOptions.getBusOperators()) {
                         int index = busOperatorFilters.indexOf(busOperator);
                         selectedBusOperatorFilters.set(index, true);
                     }
                 }
-                int totalCount = busFilterOptions.getBusOperators().size();
+                int totalCount = busFilterSortOptions.getBusOperators().size();
                 if (totalCount > 0) {
                     busOperatorSelectedTextView.setVisibility(View.VISIBLE);
                     busOperatorSelectedTextView.setText(String.format(Locale.ENGLISH,
@@ -343,18 +343,18 @@ public class FilterDialogFragment extends DialogFragment {
             selectedBusArrivalTimeRange.add(false);
         }
 
-        if (busFilterOptions != null) {
-            for (TimeRange timeRange : busFilterOptions.getBusDepartureTimeRange()) {
+        if (busFilterSortOptions != null) {
+            for (TimeRange timeRange : busFilterSortOptions.getBusDepartureTimeRange()) {
                 int index = timeRanges.indexOf(timeRange);
                 selectedBusDepartureTimeRange.set(index, true);
             }
-            for (TimeRange timeRange : busFilterOptions.getBusArrivalTimeRange()) {
+            for (TimeRange timeRange : busFilterSortOptions.getBusArrivalTimeRange()) {
                 int index = timeRanges.indexOf(timeRange);
                 selectedBusArrivalTimeRange.set(index, true);
             }
         }
 
-        int totalDepartureCount = busFilterOptions.getBusDepartureTimeRange().size();
+        int totalDepartureCount = busFilterSortOptions.getBusDepartureTimeRange().size();
         if (totalDepartureCount > 0) {
             departureTimeRangeSelectedTextView.setVisibility(View.VISIBLE);
             departureTimeRangeSelectedTextView.setText(String.format(Locale.ENGLISH,
@@ -362,7 +362,7 @@ public class FilterDialogFragment extends DialogFragment {
         } else {
             departureTimeRangeSelectedTextView.setVisibility(View.GONE);
         }
-        int totalArrivalCount = busFilterOptions.getBusArrivalTimeRange().size();
+        int totalArrivalCount = busFilterSortOptions.getBusArrivalTimeRange().size();
         if (totalArrivalCount > 0) {
             arrivalTimeRangeSelectedTextView.setVisibility(View.VISIBLE);
             arrivalTimeRangeSelectedTextView.setText(String.format(Locale.ENGLISH,

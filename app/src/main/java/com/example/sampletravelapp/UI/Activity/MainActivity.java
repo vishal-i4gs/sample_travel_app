@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.Window;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.ImageView;
@@ -14,7 +13,7 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.sampletravelapp.Model.BusFilterOptions;
+import com.example.sampletravelapp.Model.BusFilterSortOptions;
 import com.example.sampletravelapp.Model.Place;
 import com.example.sampletravelapp.R;
 import com.example.sampletravelapp.UI.Fragment.SearchDialogFragment;
@@ -112,12 +111,12 @@ public class MainActivity extends AppCompatActivity {
             intent.putExtra("startLoc", (Serializable) sourcePlace);
             intent.putExtra("endLoc", (Serializable) destinationPlace);
             intent.putExtra("date", selectedDateInt);
-            BusFilterOptions busFilterOptions = new BusFilterOptions();
+            BusFilterSortOptions busFilterSortOptions = new BusFilterSortOptions();
             List<String> busTypes = new ArrayList<>();
             List<String> busFilters = new ArrayList<>();
-            busFilterOptions.setBusType(busTypes);
-            busFilterOptions.setBusFilters(busFilters);
-            intent.putExtra("busFilterOptions",busFilterOptions);
+            busFilterSortOptions.setBusType(busTypes);
+            busFilterSortOptions.setBusFilters(busFilters);
+            intent.putExtra("busFilterOptions", busFilterSortOptions);
             startActivity(intent);
         });
     }
