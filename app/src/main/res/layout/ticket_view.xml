@@ -342,6 +342,7 @@
                         <androidx.constraintlayout.widget.ConstraintLayout
                             android:layout_width="match_parent"
                             android:layout_height="50dp"
+                            android:id="@+id/order_status_view"
                             android:background="@android:color/white">
 
                             <TextView
@@ -353,6 +354,7 @@
                                 android:fontFamily="@font/calibri"
                                 android:textSize="16sp"
                                 android:textStyle="bold"
+                                android:id="@+id/order_status_title_text"
                                 app:layout_constraintBottom_toBottomOf="parent"
                                 app:layout_constraintEnd_toEndOf="parent"
                                 app:layout_constraintHorizontal_bias="0.0"
