@@ -14,6 +14,8 @@ import com.example.sampletravelapp.Model.BusAttributes;
 import com.example.sampletravelapp.Model.Journey;
 import com.example.sampletravelapp.Model.JourneyBusPlace;
 import com.example.sampletravelapp.Model.JourneyBusPlaceOrder;
+import com.example.sampletravelapp.Model.OrderStatus;
+import com.example.sampletravelapp.Model.RouteStatus;
 
 import java.util.List;
 
@@ -54,5 +56,8 @@ public interface JournayDao {
 
     @Query("select * from journey where journeyId = :journeyId")
     LiveData<JourneyBusPlace> loadJourney(long journeyId);
+
+    @Query("UPDATE journey SET routeStatus=:active WHERE journeyId = :journeyId")
+    void update(@RouteStatus int active, long journeyId);
 }
 
