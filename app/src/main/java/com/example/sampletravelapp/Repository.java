@@ -1,6 +1,7 @@
 package com.example.sampletravelapp;
 
 import android.content.Context;
+import android.util.Log;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Observer;
@@ -16,6 +17,7 @@ import com.example.sampletravelapp.Model.OrderBy;
 import com.example.sampletravelapp.Model.OrderItem;
 import com.example.sampletravelapp.Model.OrderStatus;
 import com.example.sampletravelapp.Model.Place;
+import com.example.sampletravelapp.Model.RouteStatus;
 import com.example.sampletravelapp.Model.TimeRange;
 import com.example.sampletravelapp.db.AppDatabase;
 import com.squareup.moshi.JsonAdapter;
@@ -135,39 +137,79 @@ public class Repository {
         }
 
 
+//        Random rng = new Random();
+//        final LiveData<List<JourneyBusPlaceOrder>> userDetailObservable = mDatabase.orderDao().loadAllOrders();
+//        Observer observer = new Observer<List<JourneyBusPlaceOrder>>() {
+//            @Override
+//            public void onChanged(List<JourneyBusPlaceOrder> journeyBusPlaceOrders) {
+//                if (journeyBusPlaceOrders.size() > 0) {
+//                    List<Integer> generated = new ArrayList<Integer>();
+//                    int totalNumberOfOffers = (int) (journeyBusPlaceOrders.size() * 0.1);
+//                    for (int i = 0; i < totalNumberOfOffers; i++) {
+//                        while (true) {
+//                            Integer next = rng.nextInt(journeyBusPlaceOrders.size());
+//                            if (!generated.contains(next)) {
+//                                generated.add(next);
+//                                break;
+//                            }
+//                        }
+//                    }
+//
+//                    int counter;
+//                    for (counter = 0; counter < generated.size(); counter++) {
+//                        int randomNumber = generated.get(counter);
+//                        JourneyBusPlaceOrder journeyBusPlaceOrder = journeyBusPlaceOrders.get(randomNumber);
+//                        appExecutors.diskIO().execute(() -> {
+//                            if (journeyBusPlaceOrder.order.active == OrderStatus.ON_SCHEDULE) {
+//                                mDatabase.orderDao().update(OrderStatus.DELAYED, journeyBusPlaceOrder.order.orderId);
+//                            }
+//                        });
+//                    }
+//                }
+//                userDetailObservable.removeObserver(this);
+//            }
+//        };
+//        userDetailObservable.observeForever(observer);
+
+
         Random rng = new Random();
-        final LiveData<List<JourneyBusPlaceOrder>> userDetailObservable = mDatabase.orderDao().loadAllOrders();
-        Observer observer = new Observer<List<JourneyBusPlaceOrder>>() {
+        final LiveData<List<Journey>> journies = mDatabase.journayDao().getAllJournies();
+        Observer observer = new Observer<List<Journey>>() {
             @Override
-            public void onChanged(List<JourneyBusPlaceOrder> journeyBusPlaceOrders) {
-                if (journeyBusPlaceOrders.size() > 0) {
+            public void onChanged(List<Journey> journeys) {
+                if (journeys.size() > 0) {
                     List<Integer> generated = new ArrayList<Integer>();
-                    int totalNumberOfOffers = (int) (journeyBusPlaceOrders.size() * 0.3);
+                    int totalNumberOfOffers = (int) (journeys.size() * 0.3);
                     for (int i = 0; i < totalNumberOfOffers; i++) {
                         while (true) {
-                            Integer next = rng.nextInt(journeyBusPlaceOrders.size());
+                            Integer next = rng.nextInt(journeys.size());
                             if (!generated.contains(next)) {
                                 generated.add(next);
                                 break;
                             }
                         }
                     }
-
                     int counter;
                     for (counter = 0; counter < generated.size(); counter++) {
                         int randomNumber = generated.get(counter);
-                        JourneyBusPlaceOrder journeyBusPlaceOrder = journeyBusPlaceOrders.get(randomNumber);
-                        appExecutors.diskIO().execute(() -> {
-                            if (journeyBusPlaceOrder.order.active == OrderStatus.ON_SCHEDULE) {
-                                mDatabase.orderDao().update(OrderStatus.DELAYED, journeyBusPlaceOrder.order.orderId);
-                            }
-                        });
+                        Journey journey = journeys.get(randomNumber);
+                        Log.d("JourneyId", String.valueOf(journey.journeyId));
+                        if(randomNumber % 2 == 0) {
+                            appExecutors.diskIO().execute(() -> {
+                                mDatabase.journayDao().update(RouteStatus.DELAYED, journey.journeyId);
+                            });
+                        }
+                        else {
+                            appExecutors.diskIO().execute(() -> {
+                                mDatabase.journayDao().update(RouteStatus.CANCELED, journey.journeyId);
+                            });
+                        }
                     }
                 }
-                userDetailObservable.removeObserver(this);
+                journies.removeObserver(this);
             }
         };
-        userDetailObservable.observeForever(observer);
+        journies.observeForever(observer);
     }
 
     static Repository getInstance(final Context context, final AppDatabase mDatabase, final AppExecutors appExecutors) {
