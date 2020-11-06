@@ -22,7 +22,7 @@ import com.example.sampletravelapp.db.dao.JournayDao;
 import com.example.sampletravelapp.db.dao.OrderDao;
 import com.example.sampletravelapp.db.dao.PlaceDao;
 
-@Database(entities = {OrderItem.class, Journey.class, Bus.class, Place.class, BusAttributes.class}, version = 1)
+@Database(entities = {OrderItem.class, Journey.class, Bus.class, Place.class, BusAttributes.class}, version = 2)
 @TypeConverters({DateConverter.class})
 public abstract class AppDatabase extends RoomDatabase {
 
