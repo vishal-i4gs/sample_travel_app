@@ -3,6 +3,7 @@ package com.example.sampletravelapp.UI.Activity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
@@ -20,6 +21,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.sampletravelapp.Model.JourneyBusPlaceOrder;
 import com.example.sampletravelapp.Model.OrderItem;
 import com.example.sampletravelapp.Model.OrderStatus;
+import com.example.sampletravelapp.Model.RouteStatus;
 import com.example.sampletravelapp.R;
 import com.example.sampletravelapp.UI.Adapters.OrderListAdapter;
 import com.example.sampletravelapp.UI.ItemClickListener;
@@ -54,13 +56,19 @@ public class OrderActivity extends AppCompatActivity {
         appViewModel.getOrderItems().observe(this, new Observer<List<JourneyBusPlaceOrder>>() {
             @Override
             public void onChanged(List<JourneyBusPlaceOrder> orderItems) {
-                OrderActivity.this.orderItems = orderItems;
-                listAdapter.setList(orderItems);
-                if (orderItems.size() == 0) {
-                    emptyJourneyField.setVisibility(View.VISIBLE);
-                } else {
-                    emptyJourneyField.setVisibility(View.GONE);
-                }
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        OrderActivity.this.orderItems = orderItems;
+                        listAdapter.setList(orderItems);
+                        if (orderItems.size() == 0) {
+                            emptyJourneyField.setVisibility(View.VISIBLE);
+                        } else {
+                            emptyJourneyField.setVisibility(View.GONE);
+                        }
+                    }
+                },10);
+
             }
         });
 
@@ -73,18 +81,12 @@ public class OrderActivity extends AppCompatActivity {
                     return;
                 }
                 JourneyBusPlaceOrder orderItem = orderItems.get(position);
-                if(orderItem.order.active != OrderStatus.CANCELED && (new Date().getTime() < orderItem.order.journeyDate.getTime())) {
+                if(orderItem.order.active != OrderStatus.CANCELED
+                        && orderItem.journey.journey.routeStatus != RouteStatus.CANCELED &&
+                        (new Date().getTime() < orderItem.order.journeyDate.getTime())) {
                     Intent intent = new Intent(OrderActivity.this, TicketViewActivity.class);
                     intent.putExtra("orderItemId",orderItem.order.orderId);
                     startActivity(intent);
-//                    new AlertDialog.Builder(OrderActivity.this)
-//                            .setTitle("Cancel ticket")
-//                            .setMessage("Are you sure you want to cancel this ticket?")
-//                            .setPositiveButton(android.R.string.yes, (dialog, which) -> {
-//                                appViewModel.removeOrderItem(orderItem.order);
-//                            })
-//                            .setNegativeButton(android.R.string.no, null)
-//                            .show();
                 }
             }
         });
@@ -92,5 +94,10 @@ public class OrderActivity extends AppCompatActivity {
         listItemView.setLayoutManager(layoutManager);
         listItemView.setItemAnimator(null);
         listItemView.setAdapter(listAdapter);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
     }
 }

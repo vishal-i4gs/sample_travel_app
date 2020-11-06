@@ -6,6 +6,7 @@ import android.view.View;
 
 import com.example.sampletravelapp.Model.BusAttributes;
 import com.example.sampletravelapp.Model.OrderStatus;
+import com.example.sampletravelapp.Model.RouteStatus;
 
 import java.util.Locale;
 
@@ -35,20 +36,26 @@ public class TicketViewActivity extends BaseDetailsActivity {
                 journeyBusAttributes.setText(String.format(Locale.ENGLISH,"%s %s",
                         journeyBusAttributes.getText().toString(),attributes.travelClass));
             }
-            switch (orderItem.order.active) {
-                case OrderStatus
-                        .ON_SCHEDULE:
-                    orderJourneyStatus.setVisibility(View.VISIBLE);
-                    orderJourneyStatus.setText("On Schedule");
-                    orderJourneyStatus.setBackgroundColor(Color.GREEN);
-                    orderJourneyStatus.setTextColor(Color.BLACK);
-                    break;
-                case OrderStatus
+            switch (orderItem.journey.journey.routeStatus) {
+                case RouteStatus
                         .DELAYED:
                     orderJourneyStatus.setVisibility(View.VISIBLE);
                     orderJourneyStatus.setText("Delayed");
                     orderJourneyStatus.setBackgroundColor(Color.BLACK);
                     orderJourneyStatus.setTextColor(Color.WHITE);
+                    break;
+                case RouteStatus
+                        .CANCELED:
+                    orderJourneyStatus.setVisibility(View.VISIBLE);
+                    orderJourneyStatus.setText("Cancelled By Operator");
+                    orderJourneyStatus.setBackgroundColor(Color.RED);
+                    orderJourneyStatus.setTextColor(Color.WHITE);
+                    break;
+                default:
+                    orderJourneyStatus.setVisibility(View.VISIBLE);
+                    orderJourneyStatus.setText("On Schedule");
+                    orderJourneyStatus.setBackgroundColor(Color.GREEN);
+                    orderJourneyStatus.setTextColor(Color.BLACK);
                     break;
             }
         });

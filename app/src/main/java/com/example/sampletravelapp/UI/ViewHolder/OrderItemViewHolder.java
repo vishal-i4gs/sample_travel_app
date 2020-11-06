@@ -12,6 +12,7 @@ import com.example.sampletravelapp.Model.JourneyBusPlace;
 import com.example.sampletravelapp.Model.JourneyBusPlaceOrder;
 import com.example.sampletravelapp.Model.OrderItem;
 import com.example.sampletravelapp.Model.OrderStatus;
+import com.example.sampletravelapp.Model.RouteStatus;
 import com.example.sampletravelapp.R;
 import com.example.sampletravelapp.UI.ItemClickListener;
 
@@ -67,28 +68,35 @@ public class OrderItemViewHolder extends RecyclerView.ViewHolder {
             orderStateTextView.setBackgroundColor(Color.GRAY);
             orderStateTextView.setTextColor(Color.BLACK);
         } else {
-            switch (orderItem.order.active) {
-                case OrderStatus
-                        .ON_SCHEDULE:
-                    orderStateTextView.setVisibility(View.VISIBLE);
-                    orderStateTextView.setText("On Schedule");
-                    orderStateTextView.setBackgroundColor(Color.GREEN);
-                    orderStateTextView.setTextColor(Color.BLACK);
-                    break;
-                case OrderStatus
-                        .DELAYED:
-                    orderStateTextView.setVisibility(View.VISIBLE);
-                    orderStateTextView.setText("Delayed");
-                    orderStateTextView.setBackgroundColor(Color.BLACK);
-                    orderStateTextView.setTextColor(Color.WHITE);
-                    break;
-                case OrderStatus
-                        .CANCELED:
-                    orderStateTextView.setVisibility(View.VISIBLE);
-                    orderStateTextView.setText("Cancelled");
-                    orderStateTextView.setBackgroundColor(Color.RED);
-                    orderStateTextView.setTextColor(Color.WHITE);
-                    break;
+            if(orderItem.order.active == OrderStatus.CANCELED) {
+                orderStateTextView.setVisibility(View.VISIBLE);
+                orderStateTextView.setText("Cancelled");
+                orderStateTextView.setBackgroundColor(Color.RED);
+                orderStateTextView.setTextColor(Color.WHITE);
+            }
+            else {
+                switch (journeyBusPlace.journey.routeStatus) {
+                    case RouteStatus
+                            .DELAYED:
+                        orderStateTextView.setVisibility(View.VISIBLE);
+                        orderStateTextView.setText("Delayed");
+                        orderStateTextView.setBackgroundColor(Color.BLACK);
+                        orderStateTextView.setTextColor(Color.WHITE);
+                        break;
+                    case RouteStatus
+                            .CANCELED:
+                        orderStateTextView.setVisibility(View.VISIBLE);
+                        orderStateTextView.setText("Cancelled By Operator");
+                        orderStateTextView.setBackgroundColor(Color.RED);
+                        orderStateTextView.setTextColor(Color.WHITE);
+                        break;
+                    default:
+                        orderStateTextView.setVisibility(View.VISIBLE);
+                        orderStateTextView.setText("On Schedule");
+                        orderStateTextView.setBackgroundColor(Color.GREEN);
+                        orderStateTextView.setTextColor(Color.BLACK);
+                        break;
+                }
             }
         }
     }
