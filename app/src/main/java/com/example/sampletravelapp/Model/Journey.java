@@ -29,4 +29,6 @@ public class Journey {
     public long price;
     public Date startTime;
     public Date endTime;
+
+    public @RouteStatus int routeStatus;
 }
