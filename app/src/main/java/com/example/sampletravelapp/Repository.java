@@ -28,6 +28,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Random;
@@ -230,6 +231,7 @@ public class Repository {
     public LiveData<List<JourneyBusPlace>> getItemsForNameOrderBy(
             String startLocation,
             String endLocation,
+            Date startDate,
             List<String> filters,
             List<String> busType,
             List<String> busOperators,
@@ -246,6 +248,14 @@ public class Repository {
         args.add(startLocation);
         stringBuilder.append(" AND endLocation =?");
         args.add(endLocation);
+
+        if(startDate != null) {
+            stringBuilder.append(" AND");
+            stringBuilder.append(" startTime >= ?");
+            args.add(startDate.getTime());
+            args.addAll(filters);
+        }
+
         if (!filters.isEmpty()) {
             stringBuilder.append(" AND");
             stringBuilder.append(" travelClass IN (");

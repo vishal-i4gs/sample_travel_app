@@ -26,6 +26,7 @@ import com.example.sampletravelapp.UI.Fragment.FilterDialogFragment;
 import com.example.sampletravelapp.UI.ItemClickListener;
 import com.example.sampletravelapp.UI.ViewModel.AppViewModel;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -41,6 +42,7 @@ public class SearchBusActivity extends AppCompatActivity {
 
     private AppViewModel appViewModel;
     private JourneyListAdapter listAdapter;
+    private Date startDate;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,6 +66,15 @@ public class SearchBusActivity extends AppCompatActivity {
         long dateInt = getIntent().getLongExtra("date", 0);
         String dateString = new SimpleDateFormat("dd - MMM - yyyy | EEEE").format(new Date(dateInt));
         dateTextField.setText(dateString);
+
+        if(new Date(dateInt).getTime() <= new Date().getTime()) {
+            SimpleDateFormat dateFormat = new SimpleDateFormat("hh mm");
+            try {
+                startDate = dateFormat.parse(dateFormat.format(new Date()));
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }
 
         sourceTextField.setText(startLocation.name);
         destionationTextField.setText(endLocation.name);
@@ -110,6 +121,7 @@ public class SearchBusActivity extends AppCompatActivity {
         appViewModel.getAllBusAttributes().observe(this, filters ->
                 appViewModel.getItemsForNameOrderBy(startLocation.id,
                         endLocation.id,
+                        startDate,
                         appViewModel.getBusFilterSortOptions().getBusFilters(),
                         appViewModel.getBusFilterSortOptions().getBusType(),
                         appViewModel.getBusFilterSortOptions().getBusOperators(),
@@ -128,6 +140,7 @@ public class SearchBusActivity extends AppCompatActivity {
                 appViewModel.setBusFilterSortOptions(busFilterOptions);
                 appViewModel.getItemsForNameOrderBy(startLocation.id,
                         endLocation.id,
+                        startDate,
                         busFilterOptions.getBusFilters(),
                         busFilterOptions.getBusType(),
                         busFilterOptions.getBusOperators(),
@@ -186,6 +199,7 @@ public class SearchBusActivity extends AppCompatActivity {
             mBuilder.setPositiveButton("OK", (dialog, which) -> {
                 appViewModel.getItemsForNameOrderBy(startLocation.id,
                         endLocation.id,
+                        startDate,
                         appViewModel.getBusFilterSortOptions().getBusFilters(),
                         appViewModel.getBusFilterSortOptions().getBusType(),
                         appViewModel.getBusFilterSortOptions().getBusOperators(),

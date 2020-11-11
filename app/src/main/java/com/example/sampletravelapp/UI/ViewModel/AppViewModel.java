@@ -21,6 +21,7 @@ import com.example.sampletravelapp.Model.Place;
 import com.example.sampletravelapp.Model.TimeRange;
 import com.example.sampletravelapp.Repository;
 
+import java.util.Date;
 import java.util.List;
 
 public class AppViewModel extends AndroidViewModel {
@@ -99,6 +100,7 @@ public class AppViewModel extends AndroidViewModel {
 
     public void getItemsForNameOrderBy(String startLocation,
                                        String stopLocation,
+                                       Date startDate,
                                        List<String> filters,
                                        List<String> busType,
                                        List<String> busOperators,
@@ -109,7 +111,7 @@ public class AppViewModel extends AndroidViewModel {
             searchForStartStopMediator.removeSource(searchForStartEndLocation);
         }
         searchForStartEndLocation = mRepository.getItemsForNameOrderBy(startLocation,
-                stopLocation, filters, busType, busOperators, departureTimeRange, arrivalTimeRange, orderBy);
+                stopLocation, startDate, filters, busType, busOperators, departureTimeRange, arrivalTimeRange, orderBy);
         searchForStartStopMediator.addSource(searchForStartEndLocation, itemOfferCarts
                 -> searchForStartStopMediator.postValue(itemOfferCarts));
     }
